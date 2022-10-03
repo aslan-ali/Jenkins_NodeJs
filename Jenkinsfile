@@ -1,7 +1,5 @@
 pipeline{
     agent any
-    environment{
-        DOCKER_TAG = getDockerTag()
     }
     stages {
         stage("Clean Up"){
