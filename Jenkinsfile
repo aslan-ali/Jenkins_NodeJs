@@ -21,9 +21,9 @@ pipeline{
             steps {
                 script {
                 sshagent(['privatekey']) {
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127"
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127 &&
+                        docker run -p 3000:3000 -d --name nodejs-app netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
                 }
-                sh "docker run -p 3000:3000 -d --name nodejs-app netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
             }
         }
     }
