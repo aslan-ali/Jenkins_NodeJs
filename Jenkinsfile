@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage("Build"){
             steps {
+                sh "which $USER"
                 sh "docker build . -t netdevopsaslan/nodes-apps:latest"
             }
         }
