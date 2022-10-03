@@ -8,7 +8,7 @@ pipeline{
         }
         stage("Build Image"){
             steps {
-                sh 'docker build -t netdevopsaslan/nodejs-application:latest'
+                sh 'docker build . -t netdevopsaslan/nodejs-application:latest'
             }
         }
         stage("Push Image"){
