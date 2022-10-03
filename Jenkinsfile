@@ -7,7 +7,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh "docker build -t netdevopsaslan/nodejs-apps:${var.tag}"
+                    sh "docker build -t netdevopsaslan/nodejs-apps:${env.tag}"
                 }
             }
         }
@@ -18,7 +18,7 @@ pipeline {
                    sh 'docker login -u netdevopsaslan -p ${DOCKER_PASSWD}'
 
 }
-                   sh 'docker push netdevopsaslan/nodejs-apps:${var.tag}'
+                   sh 'docker push netdevopsaslan/nodejs-apps:${env.tag}'
                 }
             }
         }
