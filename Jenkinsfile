@@ -12,18 +12,20 @@ pipeline{
                 withCredentials([string(credentialsId: 'DOCKER_PASSWD', variable: 'DOCKER_PASSWD')]) {
                    sh 'docker login -u netdevopsaslan -p ${DOCKER_PASSWD}'
                 }
-                sh 'docker push netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}'
+                sh "docker push netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
             }
         }
-        stage("Deploy to Kubernetes"){
+        stage("Deploy To server"){
             steps {
                 script {
-                kubeconfig(credentialsId: 'aslan', serverUrl: 'https://172.16.8.19:6443') {
-                   sh "kubectl get pods "
-               }
-               } 
+                    sh """
+                       ssh -o StrictHostKeyChecking=no -i ${privatekey} ec2-user@15.222.237.127
+                       docker run -d -p 3000:30000 netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}
+                       """
+                }
             }
+
         }
     }
-    }
+}
 }
