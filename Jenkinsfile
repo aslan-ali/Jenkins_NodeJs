@@ -6,7 +6,7 @@ pipeline {
     stages{
         stage('build image'){
             steps {
-                sh "docker build . -t netdevopsaslan/nodejs-apps:$(var.tag)"
+                sh "docker build . -t netdevopsaslan/nodejs-apps:$(tag)"
             }
         }
     }
