@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        steps {
+        stage("Build image"){
             sh "docker build . -t netdevopsaslan/nodejs-apps:latest"
         }
     }
