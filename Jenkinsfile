@@ -1,30 +1,41 @@
-pipeline{
-    agent any
-    stages {
-        stage("Build Image"){
-            steps {
-                sh "docker build . -t netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
-            }
-        }
-        stage("Stage Login"){
-            steps {
-                script {
-                withCredentials([string(credentialsId: 'DOCKER_PASSWD', variable: 'DOCKER_PASSWD')]) {
-                   sh 'docker login -u netdevopsaslan -p ${DOCKER_PASSWD}'
-                }
-                sh "docker push netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
-                }
-            }
-        }    
+pipeline {
 
-        stage("deploy devserver") {
-            steps {
-                script {
-                sshagent(['privatekey']) {
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127 'docker run -p 3000:3000 -d --name nodejs-app netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}' "
-                }
-            }
-        }
+  options {
+    ansiColor('xterm')
+  }
+
+  agent {
+    kubernetes {
+      yamlFile 'builder.yaml'
     }
-}
+  }
+
+  stages {
+
+    stage('Kaniko Build & Push Image') {
+      steps {
+        container('kaniko') {
+          script {
+            sh '''
+            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+                             --context `pwd` \
+                             --destination=justmeandopensource/myweb:${BUILD_NUMBER}
+            '''
+          }
+        }
+      }
+    }
+
+    stage('Deploy App to Kubernetes') {     
+      steps {
+        container('kubectl') {
+          withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+            sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" myweb.yaml'
+            sh 'kubectl apply -f myweb.yaml'
+          }
+        }
+      }
+    }
+  
+  }
 }
