@@ -13,16 +13,19 @@ pipeline{
                    sh 'docker login -u netdevopsaslan -p ${DOCKER_PASSWD}'
                 }
                 sh "docker push netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
-                }         
-           }
-        }
-        stage('login server'){
-            steps{
-                sshagent(credentials:['privatekey']) {
-                    sh '''ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127
-                    "whoami" '''
                 }
+            }
+        }    
+
+        stage("deploy devserver") {
+            steps {
+                script {
+                sshagent(['privatekey']) {
+                    sh "ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127"
+                }
+                sh "docker run -p 3000:3000 -d -name nodejs-app netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
             }
         }
     }
+}
 }
