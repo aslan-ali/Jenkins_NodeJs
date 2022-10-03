@@ -20,10 +20,10 @@ pipeline{
                 script {
                 kubeconfig(credentialsId: 'aslan', serverUrl: 'https://172.16.8.19:6443') {
                    sh "kubectl get pods "
-        }
-                }
+               }
+               } 
             }
         }
     }
-}
+    }
 }
