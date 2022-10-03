@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("Build Image"){
             steps {
-                sh "docker build . -t netdevopsaslan/nodejs-apps:latest"
+                sh "docker build . -t netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
             }
         }
     }
