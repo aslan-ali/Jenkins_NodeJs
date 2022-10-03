@@ -6,12 +6,6 @@ pipeline{
                 deleteDir()
             }
         }
-        stage("Test"){
-            steps {
-                sh "npm install"
-                sh "npm test"
-            }
-        }
         stage("Build Image"){
             steps {
                 sh 'docker build -t netdevopsaslan/nodejs-application:latest'
