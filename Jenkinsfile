@@ -6,7 +6,7 @@ pipeline {
 
   agent {
     kubernetes {
-      yamlFile 'builder.yaml'
+      yamlFile 'kaniko.yaml'
     }
   }
 
@@ -19,7 +19,7 @@ pipeline {
             sh '''
             /kaniko/executor --dockerfile `pwd`/Dockerfile \
                              --context `pwd` \
-                             --destination=justmeandopensource/myweb:${BUILD_NUMBER}
+                             --destination=netdevopsaslan/nodejs-apps:${BUILD_NUMBER}
             '''
           }
         }
@@ -30,8 +30,8 @@ pipeline {
       steps {
         container('kubectl') {
           withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-            sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" myweb.yaml'
-            sh 'kubectl apply -f myweb.yaml'
+            sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" deployment.yml'
+            sh 'kubectl apply -f deployment.yml'
           }
         }
       }
