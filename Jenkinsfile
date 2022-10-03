@@ -8,7 +8,7 @@ pipeline{
         }
         stage("Test"){
             steps {
-                sh "npm install -g npm@latest"
+                sh "npm install"
                 sh "npm test"
             }
         }
