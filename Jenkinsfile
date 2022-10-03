@@ -18,8 +18,8 @@ pipeline{
         stage('login server'){
             steps{
                 sshagent(credentials:['privatekey']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127
-                    "whoami" '
+                    sh '''ssh -o StrictHostKeyChecking=no ec2-user@15.222.237.127
+                    "whoami" '''
                 }
             }
         }
