@@ -12,7 +12,7 @@ pipeline{
                 withCredentials([string(credentialsId: 'DOCKER_PASSWD', variable: 'DOCKER_PASSWD')]) {
                    sh 'docker login -u netdevopsaslan -p ${DOCKER_PASSWD}'
                 }
-                sh 'docker push netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}'
+                sh "docker push netdevopsaslan/nodejs-apps:${env.BUILD_NUMBER}"
             }
         }
     }
