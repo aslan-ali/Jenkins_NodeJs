@@ -8,8 +8,8 @@ pipeline{
         }
         stage("Test"){
             steps {
-                sh "npm run test"
-                sh "npm install"
+                sh "npm install -g npm@latest"
+                sh "npm test"
             }
         }
         stage("Build Image"){
