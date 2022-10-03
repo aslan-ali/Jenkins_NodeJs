@@ -1,9 +1,10 @@
 pipeline{
     agent any
     stages {
-        stage("Clean Up"){
+        stage("Test"){
             steps {
-                deleteDir()
+                sh "npm run install"
+                sh "npm test"
             }
         }
         stage("Build Image"){
