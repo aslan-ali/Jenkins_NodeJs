@@ -1,4 +1,4 @@
-Github Actions Test with Docker
+Jenkins Test with Docker
 
 ##### Test
 The project uses jest library for tests. (see "test" script in package.json)
